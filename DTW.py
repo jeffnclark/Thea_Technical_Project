@@ -123,48 +123,41 @@ def indep_dtw(df, patients, bri_data = True):
         vitals = [temperature, respiration, heart_rate, sats, systolic_bp,
                   eye_gcs, verbal_gcs, motor_gcs]
     t = list(temperature.values())
-    DTW_t = dtaidistance.dtw.distance_matrix(t)
+    DTW_t = dtaidistance.dtw.distance_matrix_fast(t, parallel=True)
     
     print('done')
 
     r = list(respiration.values())
-    DTW_r = dtaidistance.dtw.distance_matrix(r)
+    DTW_r = dtaidistance.dtw.distance_matrix_fast(r, parallel=True)
     hr = list(heart_rate.values())
-    DTW_hr = dtaidistance.dtw.distance_matrix(hr)
+    DTW_hr = dtaidistance.dtw.distance_matrix_fast(hr, parallel=True)
     s = list(sats.values())
-    DTW_s = dtaidistance.dtw.distance_matrix(s)
+    DTW_s = dtaidistance.dtw.distance_matrix_fast(s, parallel=True)
     sb = list(systolic_bp.values())
-    DTW_sb = dtaidistance.dtw.distance_matrix(sb)
+    DTW_sb = dtaidistance.dtw.distance_matrix_fast(sb, parallel=True)
     if bri_data:
         avpu = list(avpu.values())
-        DTW_avpu = dtaidistance.dtw.distance_matrix(avpu)
+        DTW_avpu = dtaidistance.dtw.distance_matrix_fast(avpu, parallel=True)
         total_DTW_matrix = DTW_t + DTW_r + DTW_hr + DTW_s + DTW_sb + DTW_avpu
         add_100 = lambda i: i / 6
     else:
         eg = list(eye_gcs.values())
-        DTW_eg = dtaidistance.dtw.distance_matrix(eg)
+        DTW_eg = dtaidistance.dtw.distance_matrix_fast(eg, parallel=True)
         vg = list(verbal_gcs.values())
-        DTW_vg = dtaidistance.dtw.distance_matrix(vg)
+        DTW_vg = dtaidistance.dtw.distance_matrix_fast(vg, parallel=True)
         mg = list(motor_gcs.values())
-        DTW_mg = dtaidistance.dtw.distance_matrix(mg)
+        DTW_mg = dtaidistance.dtw.distance_matrix_fast(mg, parallel=True)
         total_DTW_matrix = DTW_t + DTW_r + DTW_hr + DTW_s + DTW_sb + DTW_eg + DTW_vg + DTW_mg
         add_100 = lambda i: i / 8
-    print('--- SATS DTW----', DTW_s)
     vectorized_add_100 = np.vectorize(add_100)
     average_DTW_matrix = vectorized_add_100(total_DTW_matrix)
     return average_DTW_matrix
 
-# %%
-print('Hello')
-
-load_bri_vitals('bri_sample')
 
 # %%
-
-
 if __name__ == '__main__':
     
-    df = load_bri_vitals('bri_sample')[0:300]
+    df = load_bri_vitals('bri_sample')
 
     #unique_patient_stays = pd.read_csv('/Users/theabarnes/Documents/Masters/Technical Project/6000_unique_patient_ids.csv')
     unique_patient_stays = df['stay_id'].unique()
@@ -185,4 +178,8 @@ if __name__ == '__main__':
     
     average_dtw_matrix = indep_dtw(df, unique_patient_stays)
     print(average_dtw_matrix)
+
+    # np.savetxt('bri_sample_dtw.csv',  average_dtw_matrix)
+
+
 # %%
