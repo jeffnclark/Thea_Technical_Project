@@ -10,7 +10,8 @@ import numpy as np
 from data_store.data_input import load_bri_vitals
 import dtaidistance
 import itertools
-import os
+
+#import oss
 
 # %% Functions
 def fill_mean(df, lst_features):
@@ -159,6 +160,8 @@ if __name__ == '__main__':
     
     df = load_bri_vitals('bri_sample')
 
+    print(df)
+
     #unique_patient_stays = pd.read_csv('/Users/theabarnes/Documents/Masters/Technical Project/6000_unique_patient_ids.csv')
     unique_patient_stays = df['stay_id'].unique()
 
@@ -179,7 +182,7 @@ if __name__ == '__main__':
     average_dtw_matrix = indep_dtw(df, unique_patient_stays)
     print(average_dtw_matrix)
 
-    # np.savetxt('bri_sample_dtw.csv',  average_dtw_matrix)
+    np.savetxt('bri_sample_dtw.csv',  average_dtw_matrix)
 
 
 # %%

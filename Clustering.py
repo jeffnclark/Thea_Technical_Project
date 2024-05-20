@@ -56,10 +56,12 @@ def validation(min_samples_list, scoring, coordinates):
 
 if __name__ =='__main__':
     # import DTW distance matrices
-    dtw_distance_matrix = pd.read_csv('/Users/theabarnes/Documents/Masters/6000_inpend_dtw_dm.csv', header=None)
-    dtw_distance_matrix = dtw_distance_matrix.drop([196, 424, 248, 5615, 3312])
-    dtw_distance_matrix = dtw_distance_matrix.drop(columns=dtw_distance_matrix.columns[[248, 196, 424, 5615, 3312]])
+    dtw_distance_matrix = pd.read_csv('bri_sample_dtw.csv', header=None)
 
+    #dtw_distance_matrix = dtw_distance_matrix.drop([196, 424, 248, 5615, 3312])
+    #dtw_distance_matrix = dtw_distance_matrix.drop(columns=dtw_distance_matrix.columns[[248, 196, 424, 5615, 3312]])
+
+    '''
     # import 4 hours
     dm_4 = pd.read_csv('/Users/theabarnes/Documents/Masters/Technical Project/average_dtw_matrix_4hours.csv', header=None)
     dm_4 = dm_4.drop([196, 424, 248, 5615, 3312])
@@ -80,18 +82,18 @@ if __name__ =='__main__':
     dm_1week = pd.read_csv('/Users/theabarnes/Documents/Masters/average_DTW_matrix_1week.csv', header=None)
     dm_1week = dm_1week.drop([196, 424, 248, 5615, 3312])
     dm_1week = dm_1week.drop(columns=dm_1week.columns[[248, 196, 424, 5615, 3312]])
+    '''
 
 
-
-    stay_id_labels = pd.read_csv('/Users/theabarnes/Documents/Masters/indep_6000_cluster_labels.csv')
+    #stay_id_labels = pd.read_csv('/Users/theabarnes/Documents/Masters/indep_6000_cluster_labels.csv')
     #final_output_df = pd.DataFrame(stay_id_labels['0'])
-    final_output_df = stay_id_labels.drop([196, 424, 248, 5615, 3312])
+    #final_output_df = stay_id_labels.drop([196, 424, 248, 5615, 3312])
 
     # UMAP and clustering
-    umap_2d_coords, labels2, trans = dimension_clustering(dm_24, 52, 75, 45)
-    umap_2d_coords3, labels2, trans3 = dimension_clustering(dm_72, 52, 75, 30)
-    umap_2d_coords4, labels2, trans4 = dimension_clustering(dm_1week, 52, 75, 50)
-    umap_2d_coords5, labels2, trans5 = dimension_clustering(dm_4, 52, 75, 30)
+    umap_2d_coords, labels2, trans = dimension_clustering(dtw_distance_matrix, 52, 75, 30)
+    #umap_2d_coords3, labels2, trans3 = dimension_clustering(dm_72, 52, 75, 30)
+    #umap_2d_coords4, labels2, trans4 = dimension_clustering(dm_1week, 52, 75, 50)
+    #umap_2d_coords5, labels2, trans5 = dimension_clustering(dm_4, 52, 75, 30)
     #
 
 
@@ -105,8 +107,8 @@ if __name__ =='__main__':
     # plt.show()
     # accuracy / cluster validation
 
-    list_scores, list_num_cluster, min_samples_list = validation([5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80], silhouette_score, umap_2d_coords5)
-    list_scores, list_num_cluster, min_samples_list = validation([5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80], davies_bouldin_score, umap_2d_coords5)
+    list_scores, list_num_cluster, min_samples_list = validation([5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80], silhouette_score, umap_2d_coords)
+    list_scores, list_num_cluster, min_samples_list = validation([5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80], davies_bouldin_score, umap_2d_coords)
     labels = final_output_df['clusters']
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(18,4))
     labels = final_output_df['clusters']
